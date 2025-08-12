@@ -11,9 +11,6 @@ export default function TransactionsPage() {
   const [accounts, setAccounts] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
-  const [selectedAccountId, setSelectedAccountId] = useState('');
-  const [emailTarget, setEmailTarget] = useState('');
-  const [emailRange, setEmailRange] = useState('10');
 
   const load = async () => {
     setLoading(true);
@@ -109,43 +106,6 @@ export default function TransactionsPage() {
           {editing ? 'ذخیره' : 'ثبت'}
         </button>
       </form>
-
-      <div className="bg-white p-3 rounded border grid grid-cols-1 md:grid-cols-6 gap-2 items-center">
-        <div className="md:col-span-2 min-w-[240px]">
-          <Select
-            isRtl isSearchable isClearable placeholder="انتخاب حساب برای گزارش..."
-            options={(accounts||[]).map(a=>({ value: a.id, label: `${a.customer?.fullName || a.customerId} - ${a.currencyCode}` }))}
-            value={(accounts||[]).map(a=>({ value: a.id, label: `${a.customer?.fullName || a.customerId} - ${a.currencyCode}` })).find(o=>String(o.value)===String(selectedAccountId)) || null}
-            onChange={(opt)=> setSelectedAccountId(opt ? opt.value : '')}
-          />
-        </div>
-        <a
-          className={`text-center bg-indigo-600 hover:bg-indigo-700 text-white rounded px-4 py-2 shadow-md transition-all ${!selectedAccountId?'opacity-50 pointer-events-none':''}`}
-          href={selectedAccountId ? API_ENDPOINTS.transactions.statementPdf(selectedAccountId) : '#'}
-          target="_blank"
-        >دانلود PDF</a>
-        <input className="border p-2 rounded" placeholder="ایمیل" value={emailTarget} onChange={e=>setEmailTarget(e.target.value)} />
-        <select className="border p-2 rounded" value={emailRange} onChange={e=>setEmailRange(e.target.value)}>
-          <option value="10">۱۰ گردش آخر</option>
-          <option value="100">۱۰۰ گردش آخر</option>
-          <option value="year">کل گردش یکساله</option>
-        </select>
-        <button
-          className={`bg-emerald-600 hover:bg-emerald-700 text-white rounded px-6 py-2 shadow-md transition-all ${(!selectedAccountId||!emailTarget)?'opacity-50 cursor-not-allowed':''}`}
-          disabled={!selectedAccountId || !emailTarget}
-          onClick={async ()=>{
-            setErrorMsg(''); setSuccessMsg('');
-            try {
-              const res = await fetch(API_ENDPOINTS.transactions.emailStatement(selectedAccountId), {
-                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ to: emailTarget, range: emailRange })
-              });
-              const data = await res.json();
-              if (data.success) setSuccessMsg('PDF به ایمیل ارسال شد'); else setErrorMsg(data.message || 'ارسال ناموفق بود');
-            } catch { setErrorMsg('خطا در ارسال ایمیل'); }
-          }}
-          type="button"
-        >ارسال PDF به ایمیل</button>
-      </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border">
           <thead>

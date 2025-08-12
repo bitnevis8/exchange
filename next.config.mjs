@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['api.taganeh.ir', 'localhost', 'taganeh.ir'],
+    domains: ['api.taganeh.ir', 'localhost', 'taganeh.ir', 'exchange-api.taganeh.ir', 'exchange.taganeh.ir'],
     formats: ['image/webp', 'image/avif'],
     unoptimized: true, // برای تصاویر خارجی
   },

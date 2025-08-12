@@ -7,8 +7,8 @@ let API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 if (!API_BASE_URL) {
   if (!isDevelopment) {
     // هشدار برای لاگ سرور
-    console.warn('⚠️ NEXT_PUBLIC_API_URL is not set! Defaulting to https://api.taganeh.ir');
-    API_BASE_URL = 'https://api.taganeh.ir';
+    console.warn('⚠️ NEXT_PUBLIC_API_URL is not set! Defaulting to https://exchange-api.taganeh.ir');
+    API_BASE_URL = 'https://exchange-api.taganeh.ir';
   } else {
     API_BASE_URL = 'http://localhost:3000';
   }
@@ -103,10 +103,6 @@ export const API_ENDPOINTS = {
     base: `${API_BASE_URL}/transaction`,
     getAll: `${API_BASE_URL}/transaction/getAll`,
     create: `${API_BASE_URL}/transaction/create`,
-    statement: (accountId) => `${API_BASE_URL}/transaction/statement/${accountId}`,
-    statementPdf: (accountId) => `${API_BASE_URL}/transaction/statement/${accountId}/pdf`,
-    emailStatement: (accountId) => `${API_BASE_URL}/transaction/statement/${accountId}/pdf/send`,
-    yearClose: (customerId) => `${API_BASE_URL}/transaction/year-close/${customerId}`,
   },
   companies: {
     base: `${API_BASE_URL}/company`,
