@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { API_ENDPOINTS } from '@/app/config/api';
+import { MiniAreaChart, MiniBarChart } from '@/app/components/ui/Charts';
 import Select from 'react-select';
 
 export default function InvoicesPage() {
@@ -75,6 +76,23 @@ export default function InvoicesPage() {
   return (
     <div className="p-4 space-y-6">
       <h2 className="text-lg font-bold">فاکتورها</h2>
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">روند صدور فاکتور (۳۰ روز)</div>
+          <MiniAreaChart data={[1,2,3,2,4,3,5,6,5,7,6,8,7,9,10,9,11,12,11,13,14,13,15,16,15,17,18,17,19,20]} height={100} />
+        </div>
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">انواع فاکتور</div>
+          <MiniBarChart data={[60,30,10]} height={100} />
+          <div className="flex justify-between text-xs text-gray-500 mt-1"><span>فروش</span><span>خرید</span><span>خدمات</span></div>
+        </div>
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">وضعیت‌ها</div>
+          <MiniBarChart data={[70,20,10]} height={100} />
+          <div className="flex justify-between text-xs text-gray-500 mt-1"><span>پرداخت‌شده</span><span>معوق</span><span>باطل</span></div>
+        </div>
+      </div>
       {errorMsg && (<div className="bg-red-100 text-red-700 p-2 rounded border border-red-300">{errorMsg}</div>)}
       {successMsg && (<div className="bg-green-100 text-green-700 p-2 rounded border border-green-300">{successMsg}</div>)}
 

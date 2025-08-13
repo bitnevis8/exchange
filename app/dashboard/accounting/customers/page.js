@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { API_ENDPOINTS } from '@/app/config/api';
+import { MiniAreaChart, MiniBarChart } from '@/app/components/ui/Charts';
 
 export default function CustomersPage() {
   const [items, setItems] = useState([]);
@@ -78,6 +79,23 @@ export default function CustomersPage() {
   return (
     <div className="p-4 space-y-6">
       <h2 className="text-lg font-bold">مشتریان</h2>
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">روند رشد مشتریان (۹۰ روز)</div>
+          <MiniAreaChart data={[2,3,4,5,6,8,9,11,12,13,14,16,17,18,19,20,22,23,25,27,28,29,31,33,34,36,37,38,40,42,43,45,47,48,49,51,53,54,55,57,58,60,61,63,65,66,67,69,70,72,73,75,76,78,80,81,83,85,86,88,89,90,92,93,95,96,97,98,100,102,103,105,106,108,109,111,112,114,115,117,118,120,121,123,124,126,127,129,130,132]} height={100} />
+        </div>
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">فعال/غیرفعال</div>
+          <MiniBarChart data={[85,15]} height={100} />
+          <div className="flex justify-between text-xs text-gray-500 mt-1"><span>فعال</span><span>غیرفعال</span></div>
+        </div>
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">Top 3 مشتری</div>
+          <MiniBarChart data={[40,35,25]} height={100} />
+          <div className="flex justify-between text-xs text-gray-500 mt-1"><span>مشتری A</span><span>مشتری B</span><span>مشتری C</span></div>
+        </div>
+      </div>
       {errorMsg && (<div className="bg-red-100 text-red-700 p-2 rounded border border-red-300">{errorMsg}</div>)}
       {successMsg && (<div className="bg-green-100 text-green-700 p-2 rounded border border-green-300">{successMsg}</div>)}
 

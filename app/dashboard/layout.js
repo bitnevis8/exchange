@@ -104,7 +104,7 @@ export default function DashboardLayout({ children }) {
     <div className="flex flex-col md:flex-row h-screen bg-gray-100">
       {/* Mobile Sidebar Toggle Button */}
       <button
-        className="md:hidden fixed top-4 right-4 z-50 p-2 rounded-md bg-gray-800 text-white"
+        className="md:hidden fixed top-4 right-4 z-[10001] p-2 rounded-md bg-gray-800 text-white"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         {isSidebarOpen ? (
@@ -121,7 +121,7 @@ export default function DashboardLayout({ children }) {
       {/* Overlay for mobile sidebar */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-[10000] md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         ></div>
       )}
@@ -130,7 +130,7 @@ export default function DashboardLayout({ children }) {
       <aside
         className={`transform transition-transform duration-300 ease-in-out
           ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'} 
-          fixed top-0 right-0 h-full w-64 bg-gray-800 text-white z-50 md:relative md:translate-x-0 md:w-64 md:flex-shrink-0`}
+          fixed top-0 right-0 h-full w-64 bg-gray-800 text-white z-[10001] md:relative md:translate-x-0 md:w-64 md:flex-shrink-0`}
       >
         <Sidebar onLinkClick={() => setIsSidebarOpen(false)} />
       </aside>
@@ -139,16 +139,7 @@ export default function DashboardLayout({ children }) {
       <main className={`flex-1 overflow-y-auto p-4 md:p-6 transition-all duration-300 ease-in-out
         ${isSidebarOpen ? 'md:mr-64' : 'md:mr-0'}`}
       >
-        {user && (
-          <div className="flex justify-end mb-4">
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md shadow-sm transition duration-150 ease-in-out"
-            >
-              خروج
-            </button>
-          </div>
-        )}
+        {/* حذف دکمه خروج اینجا؛ خروج از منوی هدر انجام می‌شود */}
         {user && user.email && !user.isEmailVerified && (
           <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
             <p className="font-bold">ایمیل شما تایید نشده است!</p>

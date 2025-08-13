@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { API_ENDPOINTS } from '@/app/config/api';
+import { MiniAreaChart, MiniBarChart } from '@/app/components/ui/Charts';
 import Select from 'react-select';
 
 export default function TransactionsPage() {
@@ -74,6 +75,25 @@ export default function TransactionsPage() {
   return (
     <div className="p-4 space-y-6">
       <h2 className="text-lg font-bold">تراکنش‌ها</h2>
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">روند حجم تراکنش (۷ روز)</div>
+          <MiniAreaChart data={[12, 18, 15, 22, 30, 28, 35]} height={100} />
+        </div>
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">نوع تراکنش‌ها</div>
+          <MiniBarChart data={[20,18,12,10,8,7]} height={100} />
+          <div className="grid grid-cols-3 gap-1 text-[10px] text-gray-500 mt-1">
+            <span>نقد دریافتی</span><span>نقد پرداختی</span><span>حواله ورودی</span><span>حواله خروجی</span><span>خرید</span><span>فروش</span>
+          </div>
+        </div>
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">ارزهای پرتراکنش</div>
+          <MiniBarChart data={[42,30,18]} height={100} />
+          <div className="flex justify-between text-xs text-gray-500 mt-1"><span>AED</span><span>USD</span><span>IRR</span></div>
+        </div>
+      </div>
       {errorMsg && (<div className="bg-red-100 text-red-700 p-2 rounded border border-red-300">{errorMsg}</div>)}
       {successMsg && (<div className="bg-green-100 text-green-700 p-2 rounded border border-green-300">{successMsg}</div>)}
 

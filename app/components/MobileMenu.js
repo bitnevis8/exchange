@@ -2,9 +2,21 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useAuth } from '../context/AuthContext';
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, loading, setUser } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    } catch {}
+    if (typeof window !== 'undefined') localStorage.clear();
+    if (setUser) setUser(null);
+    setIsOpen(false);
+    window.location.href = '/auth/login';
+  };
 
   return (
     <div className="md:hidden">
@@ -26,30 +38,48 @@ export default function MobileMenu() {
       {isOpen && (
         <div className="absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link
-              href="/auth/login"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors duration-200"
-              onClick={() => setIsOpen(false)}
-              prefetch={true}
-            >
-              ورود
-            </Link>
-            <Link
-              href="/auth/register"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors duration-200"
-              onClick={() => setIsOpen(false)}
-              prefetch={true}
-            >
-              ثبت نام
-            </Link>
-            <Link
-              href="/"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200"
-              onClick={() => setIsOpen(false)}
-              prefetch={true}
-            >
-              صفحه اصلی
-            </Link>
+            {!loading && !user && (
+              <>
+                <Link
+                  href="/auth/login"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors duration-200"
+                  onClick={() => setIsOpen(false)}
+                  prefetch={true}
+                >
+                  ورود
+                </Link>
+                <Link
+                  href="/auth/register"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-colors duration-200"
+                  onClick={() => setIsOpen(false)}
+                  prefetch={true}
+                >
+                  ثبت نام
+                </Link>
+              </>
+            )}
+            {!loading && user && (
+              <>
+                <div className="px-3 py-2 text-sm text-gray-600">
+                  {user.firstName} {user.lastName}
+                </div>
+                <Link
+                  href="/dashboard"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200"
+                  onClick={() => setIsOpen(false)}
+                  prefetch={true}
+                >
+                  داشبورد
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-right px-3 py-2 rounded-md text-base font-medium text-rose-600 hover:bg-rose-50 transition-colors duration-200"
+                >
+                  خروج
+                </button>
+              </>
+            )}
+            
             {/* <Link
               href="/categories"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200"
@@ -67,14 +97,7 @@ export default function MobileMenu() {
             >
               منابع خبری
             </Link> */}
-            <Link
-              href="/location"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200"
-              onClick={() => setIsOpen(false)}
-              prefetch={true}
-            >
-              مکان‌ها
-            </Link>
+            
             {/* <Link
               href="/about"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200"

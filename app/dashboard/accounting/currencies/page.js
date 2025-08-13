@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { API_ENDPOINTS } from '@/app/config/api';
+import { MiniAreaChart, MiniBarChart } from '@/app/components/ui/Charts';
 
 export default function CurrenciesPage() {
   const [items, setItems] = useState([]);
@@ -61,6 +62,23 @@ export default function CurrenciesPage() {
   return (
     <div className="p-4 space-y-6">
       <h2 className="text-lg font-bold">ارزها</h2>
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">نوسان نرخ پایه (۳۰ روز)</div>
+          <MiniAreaChart data={[30,32,31,35,33,36,38,37,40,39,42,41,43,44,45,46,44,47,48,50,49,51,52,53,55,54,56,57,58,60]} height={100} />
+        </div>
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">محبوب‌ترین ارزها</div>
+          <MiniBarChart data={[50,30,20]} height={100} />
+          <div className="flex justify-between text-xs text-gray-500 mt-1"><span>AED</span><span>USD</span><span>IRR</span></div>
+        </div>
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">درصد ارز پایه</div>
+          <MiniBarChart data={[70,30]} height={100} />
+          <div className="flex justify-between text-xs text-gray-500 mt-1"><span>Base</span><span>Others</span></div>
+        </div>
+      </div>
 
       <form onSubmit={editing ? handleUpdate : handleCreate} className="grid grid-cols-1 md:grid-cols-8 gap-2 bg-white p-3 rounded border">
         <input className="border p-2 rounded" placeholder="کد" value={form.code} onChange={e=>setForm({...form, code: e.target.value.toUpperCase()})} disabled={!!editing} required />

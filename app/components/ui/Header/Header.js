@@ -21,7 +21,7 @@ export default function Header() {
                 <h1 className="text-lg sm:text-2xl font-bold text-slate-800 bg-clip-text">
                   تگانه
                 </h1>
-                <p className="text-xs bg-gradient-to-r from-blue-600 to-purple-600 -mt-1 hidden sm:block bg-clip-text text-transparent">
+                <p className="text-xs bg-gradient-to-r from-blue-600 to-purple-600 -mt-1 bg-clip-text text-transparent">
                 Exchange
                 </p>
               </div>

@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { API_ENDPOINTS } from '@/app/config/api';
+import { MiniAreaChart, MiniBarChart } from '@/app/components/ui/Charts';
 import Select from 'react-select';
 
 export default function AccountsPage() {
@@ -71,6 +72,23 @@ export default function AccountsPage() {
   return (
     <div className="p-4 space-y-6">
       <h2 className="text-lg font-bold">حساب‌ها</h2>
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">روند تعداد حساب‌ها (۳۰ روز)</div>
+          <MiniAreaChart data={[3,5,6,8,7,9,12,10,14,15,16,18,20,19,21,22,23,25,24,26,27,28,30,29,31,33,32,34,35,36]} height={100} />
+        </div>
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">توزیع نوع مالکیت</div>
+          <MiniBarChart data={[60,40]} height={100} />
+          <div className="flex justify-between text-xs text-gray-500 mt-1"><span>امانی</span><span>شخصی</span></div>
+        </div>
+        <div className="bg-white p-4 rounded border">
+          <div className="text-sm text-gray-600 mb-2">ارزهای برتر</div>
+          <MiniBarChart data={[50,35,15]} height={100} />
+          <div className="flex justify-between text-xs text-gray-500 mt-1"><span>AED</span><span>USD</span><span>IRR</span></div>
+        </div>
+      </div>
       {errorMsg && (<div className="bg-red-100 text-red-700 p-2 rounded border border-red-300">{errorMsg}</div>)}
       {successMsg && (<div className="bg-green-100 text-green-700 p-2 rounded border border-green-300">{successMsg}</div>)}
 

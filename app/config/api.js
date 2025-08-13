@@ -98,11 +98,15 @@ export const API_ENDPOINTS = {
     getAll: `${API_BASE_URL}/account/getAll`,
     byCustomer: (customerId) => `${API_BASE_URL}/account/byCustomer/${customerId}`,
     create: `${API_BASE_URL}/account/create`,
+    update: (id) => `${API_BASE_URL}/account/update/${id}`,
+    delete: (id) => `${API_BASE_URL}/account/delete/${id}`,
   },
   transactions: {
     base: `${API_BASE_URL}/transaction`,
     getAll: `${API_BASE_URL}/transaction/getAll`,
     create: `${API_BASE_URL}/transaction/create`,
+    update: (id) => `${API_BASE_URL}/transaction/update/${id}`,
+    delete: (id) => `${API_BASE_URL}/transaction/delete/${id}`,
   },
   companies: {
     base: `${API_BASE_URL}/company`,
@@ -117,6 +121,8 @@ export const API_ENDPOINTS = {
     getAll: `${API_BASE_URL}/invoice/getAll`,
     getById: (id) => `${API_BASE_URL}/invoice/getOne/${id}`,
     create: `${API_BASE_URL}/invoice/create`,
+    update: (id) => `${API_BASE_URL}/invoice/update/${id}`,
+    delete: (id) => `${API_BASE_URL}/invoice/delete/${id}`,
   },
   // مقالات - حذف شده: برای سازگاری موقت، مسیرهای خنثی
   articles: {
