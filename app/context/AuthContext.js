@@ -13,6 +13,8 @@ export function AuthProvider({ children }) {
       setLoading(true);
       const response = await fetch("/api/auth/me", {
         credentials: "include",
+        // ensure no cache when behind CDN/proxy
+        headers: { 'Cache-Control': 'no-cache' },
       });
       const data = await response.json();
 

@@ -20,10 +20,20 @@ export async function POST(request) {
       },
     });
 
-    response.headers.set(
-      'Set-Cookie',
-      'token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax; Secure=false'
-    );
+    try {
+      const url = new URL(request.url);
+      const host = url.hostname;
+      const isSecure = url.protocol === 'https:' || request.headers.get('x-forwarded-proto') === 'https';
+      response.headers.set(
+        'Set-Cookie',
+        `token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax; Domain=${host}; ${isSecure ? 'Secure' : ''}`
+      );
+    } catch {
+      response.headers.set(
+        'Set-Cookie',
+        'token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax'
+      );
+    }
 
     return response;
   } catch (error) {

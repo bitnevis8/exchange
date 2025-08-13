@@ -11,6 +11,7 @@ export async function GET(request) {
       headers: {
         'Content-Type': 'application/json',
         'Cookie': cookies || '', // Forward cookies
+        'x-forwarded-proto': request.headers.get('x-forwarded-proto') || request.headers.get('X-Forwarded-Proto') || '',
       },
     });
 
@@ -73,7 +74,32 @@ export async function GET(request) {
 
     // If backend sets a cookie, propagate it to the frontend
     if (setCookieHeader) {
-      response.headers.append('Set-Cookie', setCookieHeader);
+      try {
+        const url = new URL(request.url);
+        const host = url.hostname;
+        const isSecure = url.protocol === 'https:' || request.headers.get('x-forwarded-proto') === 'https' || request.headers.get('X-Forwarded-Proto') === 'https';
+        const raw = setCookieHeader.split(',')[0];
+        const parts = raw.split(';').map(s => s.trim());
+        const [nameValue, ...attrs] = parts;
+        const [cookieName, cookieValue] = nameValue.split('=');
+        const expiresAttr = attrs.find(a => a.toLowerCase().startsWith('expires='));
+        const maxAgeAttr = attrs.find(a => a.toLowerCase().startsWith('max-age='));
+        const rebuilt = [
+          `${cookieName}=${cookieValue}`,
+          'Path=/',
+          'HttpOnly',
+          'SameSite=Lax',
+          `Domain=${host}`,
+          isSecure ? 'Secure' : ''
+        ]
+        .concat(expiresAttr ? [expiresAttr] : [])
+        .concat(maxAgeAttr ? [maxAgeAttr] : [])
+        .filter(Boolean)
+        .join('; ');
+        response.headers.append('Set-Cookie', rebuilt);
+      } catch (e) {
+        response.headers.append('Set-Cookie', setCookieHeader);
+      }
     }
 
     return response;

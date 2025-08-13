@@ -18,17 +18,48 @@ export async function POST(request) {
 
     const data = await backendResponse.json();
     
-    const response = new Response(JSON.stringify(data), {
+  const response = new Response(JSON.stringify(data), {
       status: backendResponse.status,
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
-    // If backend sets a cookie, propagate it to the frontend
-    if (setCookieHeader) {
+  // If backend sets a cookie, re-set it for the frontend domain
+  if (setCookieHeader) {
+    try {
+      const url = new URL(request.url);
+      const host = url.hostname; // e.g. exchange.taganeh.ir
+      const isSecure = url.protocol === 'https:' || request.headers.get('x-forwarded-proto') === 'https' || request.headers.get('X-Forwarded-Proto') === 'https';
+      // Pick the first cookie (assuming auth cookie)
+      const raw = setCookieHeader.split(',')[0];
+      const parts = raw.split(';').map(s => s.trim());
+      const [nameValue, ...attrs] = parts;
+      const [cookieName, cookieValue] = nameValue.split('=');
+
+      // Preserve Expires/Max-Age if present
+      const expiresAttr = attrs.find(a => a.toLowerCase().startsWith('expires='));
+      const maxAgeAttr = attrs.find(a => a.toLowerCase().startsWith('max-age='));
+
+      const rebuilt = [
+        `${cookieName}=${cookieValue}`,
+        'Path=/',
+        'HttpOnly',
+        'SameSite=Lax',
+        `Domain=${host}`,
+        isSecure ? 'Secure' : ''
+      ]
+      .concat(expiresAttr ? [expiresAttr] : [])
+      .concat(maxAgeAttr ? [maxAgeAttr] : [])
+      .filter(Boolean)
+      .join('; ');
+
+      response.headers.append('Set-Cookie', rebuilt);
+    } catch (e) {
+      // Fallback to original cookie if rewriting fails
       response.headers.append('Set-Cookie', setCookieHeader);
     }
+  }
 
     return response;
   } catch (error) {
